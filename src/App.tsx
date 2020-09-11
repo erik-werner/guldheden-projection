@@ -1,6 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {BarChart, ChartData} from "./components/BarChart/BarChart";
+
+const data: ChartData = {
+  label: 'hej',
+  value: 10
+};
 
 function App() {
   return (
@@ -19,6 +25,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <BarChart data={[data]} width={100} height={100} />
     </div>
   );
 }
