@@ -1,4 +1,4 @@
-import React, {RefObject} from 'react'
+import React, { RefObject } from 'react'
 import D3BarChart from "./D3BarChart";
 
 export type ChartData = {
@@ -24,7 +24,7 @@ export class BarChart extends React.Component<BarChartProps, BarChartState> {
     };
 
     static getDerivedStateFromProps(nextProps: BarChartProps, prevState: BarChartState ) {
-        const newData = true; // todo find out if new data available equals(nextProps.data, prevState.chart.data)
+        const newData = false; // todo find out if new data available equals(nextProps.data, prevState.chart.data)
         if (prevState.chart && newData) {
             const { data, width, height } = nextProps;
             prevState.chart.draw(data, width, height);
@@ -53,7 +53,7 @@ export class BarChart extends React.Component<BarChartProps, BarChartState> {
 
     render() {
         return <div>
-            <svg ref={this.svgRef} width={'50%'} height={'50%'} />
+            <svg ref={this.svgRef} width={'100px'} height={'50%'} />
         </div>
     }
 }
