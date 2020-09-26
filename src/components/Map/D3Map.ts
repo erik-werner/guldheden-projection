@@ -62,11 +62,7 @@ export default class D3Map {
         const line = context.append("path")
             .datum(graticule)
             .attr("class", "graticule")
-            .attr("d", path)
-            .attr("fill", "none")
-            .attr("stroke-width", "0.5px")
-            .attr("stroke", "#000")
-            .attr("stroke-opacity", "0.3");
+            .attr("d", path);
     }
 
 }

@@ -19,8 +19,8 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["./src/components/BarChart/**.*"],
+  "include": ["./src/components/BarChart/**.*", "./src/components/Map/Map.tsx", "./src/components/Map/Map.style.ts"],
   "exclude": [
-    "./src/components/Map/**.*"
+    "./src/components/Map/D3Map.ts"
   ]
 }

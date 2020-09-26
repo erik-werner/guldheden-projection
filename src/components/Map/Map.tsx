@@ -1,5 +1,7 @@
 import React, { RefObject } from 'react'
-import D3Map from "./D3Map";
+import D3Map from './D3Map';
+import styled from 'styled-components';
+import { MapStyle } from './Map.style';
 
 function arraysEqual(a, b) {
     if (a === b) return true;
@@ -18,13 +20,14 @@ function arraysEqual(a, b) {
 }
 
 type MapProps = {
-    data: any
+    data: any;
+    className: string;
 };
 type MapState = {
     chart: D3Map | null;
     data: any[];
 };
-export class Map extends React.Component<MapProps, MapState> {
+class MapWithoutStyle extends React.Component<MapProps, MapState> {
     svgRef: RefObject<SVGSVGElement> = React.createRef<SVGSVGElement>();
 
     state = {
@@ -55,9 +58,14 @@ export class Map extends React.Component<MapProps, MapState> {
 
 
     render() {
-        return <div>
+        const { className } = this.props;
+        return <div className={className}>
             <svg ref={this.svgRef} width={'100%'} height={'100%'} />
         </div>
     }
 
 }
+
+export const Map = styled(MapWithoutStyle)`
+    ${MapStyle}
+`;
