@@ -11,4 +11,17 @@ export const MapStyle = `
         stroke: #00f;
         stroke-opacity: 0.3;
     }
+    
+    .graticule-outline {
+        fill: none;
+        stroke: #333;
+        stroke-width: 1.5px;
+    }
+    
+    .country {
+      fill: #b8b8b8;
+      stroke: #fff;
+      stroke-width: .5px;
+      stroke-linejoin: round;
+    }
 `;

@@ -1,4 +1,4 @@
-{
+export const world = {
   "type": "Topology",
   "transform": {
     "scale": [

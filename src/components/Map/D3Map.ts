@@ -1,24 +1,13 @@
 import * as d3 from 'd3';
-import { RefObject } from "react";
+import { RefObject } from 'react';
+import * as topojson from 'topojson-client';
+import { world } from './data/readme-world-110m';
 
 type D3MapProps = {
     data: any;
 }
 const width = 100;
 const height = 100;
-
-type Point = {
-    x: number;
-    y: number;
-}
-
-const lineData2: Point[] = [ { "x":  5, "y":  30 },{ "x":  75, "y":  30 },
-    { "x":  75, "y":  90 },{ "x": 150, "y":  90 },
-    { "x": 150, "y": 150 },{ "x": 190, "y": 150 }];
-
-const lineData = [[0, 20], [50, 30], [100, 50], [200, 60], [300, 90]];
-
-const linePathGenerator = d3.line();
 
 export default class D3Map {
 
@@ -32,19 +21,7 @@ export default class D3Map {
     draw(data: any) {
 
         console.log('data', data);
-        let context = d3.select(this.svgRef.current);
-
-        // let svgPath = context.append("path")
-        //     .attr("stroke", "blue")
-        //     .attr("stroke-width", "4px")
-        //     .attr("fill", "none");
-        //
-        // svgPath
-        //     .attr("d", linePathGenerator(lineData));
-        //
-        // const pathString = linePathGenerator(lineData);
-
-        // d3.select('path').attr('d', pathString);
+        let svg = d3.select(this.svgRef.current);
 
         // World map
 
@@ -59,10 +36,32 @@ export default class D3Map {
         const graticule = d3.geoGraticule()
             .extent([[-180, -90], [180 - .1, 90 - .1]]);
 
-        const line = context.append("path")
+        const line = svg.append('path')
             .datum(graticule)
-            .attr("class", "graticule")
-            .attr("d", path);
+            .attr('class', 'graticule')
+            .attr('d', path);
+
+        svg.append('circle')
+            .attr('class', 'graticule-outline')
+            .attr('cx', width / 2)
+            .attr('cy', height / 2)
+            .attr('r', projection.scale());
+
+        const title = svg
+            .append('text')
+            .attr('x', width / 2)
+            .attr('y', height * 3 / 5);
+
+        console.log('world', world);
+
+        // @ts-ignore
+        const countries = topojson.feature(world, world.objects.countries).features;
+        svg.selectAll('.country')
+            .data(countries)
+            .enter().insert('path', '.graticule')
+            .attr('class', 'country')
+            .attr('d', path);
+
     }
 
 }
