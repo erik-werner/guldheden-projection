@@ -1,24 +1,26 @@
 import * as d3 from 'd3';
 import { RefObject } from 'react';
 import * as topojson from 'topojson-client';
-import { world } from './data/readme-world-110m';
 
 type D3MapProps = {
     data: any;
 }
-const width = 100;
-const height = 100;
+const width = 1000;
+const height = 1000;
 
 function linearised_log(x, cutoff) {
-    return x < cutoff ? x : Math.log(x / cutoff) + cutoff;
+    return x < cutoff ? x : cutoff * Math.log(x / cutoff) + cutoff;
 }
 
-
-function project(x, y) {
-    let distance = y + Math.PI/2;
+function project(x2, y2) {
+    const x1 = 0;
+    const y1 = 0;
+    let distance = d3.geoDistance([x1, y1], [x2, y2]);
     let r = linearised_log(distance, 0.00001);
-    r /= 5; // Not the prettiest way to fit to the screen...
-    let theta = -x + Math.PI / 2;
+    const b = Math.sin(x2 - x1) * Math.cos(y2);
+    const a = Math.cos(y1) * Math.sin(y2) -
+        Math.sin(y1) * Math.cos(y2) * Math.cos(x2 - x1);
+    const theta = -Math.atan2(b, a) + Math.PI / 2;
     return [r * Math.cos(theta), r * Math.sin(theta)];
 }
 
@@ -37,46 +39,36 @@ export default class D3Map {
         console.log('data', data);
         let svg = d3.select(this.svgRef.current);
 
+        const graticule = d3.geoGraticule();
+
         // @ts-ignore
         const projection = d3.geoProjection(project)
-            // .scale(248)
-            // .clipAngle(180)
-            // .center([-111.961058, -1057.6887483])
-            .rotate([-11.961058, -57.6887483 - 90, 0])
-            ; // TODO: Figure out what all this does...
-
-        const centroid = d3.geoPath(projection).centroid;
+            .fitSize([width, height], graticule())
+            .rotate([-11.961058, -57.6887483, 0]);
 
         const path = d3.geoPath(projection);
 
-        const graticule = d3.geoGraticule()
-            .extent([[-180, -90], [180 - .1, 90 - .1]]);
-
-        const line = svg.append('path')
+        svg.append('path')
             .datum(graticule)
             .attr('class', 'graticule')
             .attr('d', path);
 
-        // svg.append('circle')
-        //     .attr('class', 'graticule-outline')
-        //     .attr('cx', width)
-        //     .attr('cy', height)
-        //     .attr('r', projection.scale());
-
-        const title = svg
+        svg
             .append('text')
             .attr('x', width / 2)
             .attr('y', height * 3 / 5);
 
-        console.log('world', world);
+        d3.json('/mapshaper_10m.topojson').then(plotWorld);
 
-        // @ts-ignore
-        const countries = topojson.feature(world, world.objects.countries).features;
-        svg.selectAll('.country')
-            .data(countries)
-            .enter().insert('path', '.graticule')
-            .attr('class', 'country')
-            .attr('d', path);
+        function plotWorld(world) {
+            // @ts-ignore
+            const countries = topojson.feature(world, world.objects.ne_10m_admin_0_countries).features;
+            svg.selectAll('.country')
+                .data(countries)
+                .enter().insert('path', '.graticule')
+                .attr('class', 'country')
+                .attr('d', path);
+        }
 
     }
 
