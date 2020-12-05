@@ -20,7 +20,7 @@ export const MapStyle = `
     
     .country {
       fill: #b8b8b8;
-      stroke: #fff;
+      stroke: #000;
       stroke-width: .5px;
       stroke-linejoin: round;
     }
