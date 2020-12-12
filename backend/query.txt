@@ -2,4 +2,4 @@
 way
   ["highway"]
   (57.68820, 11.96096, 57.69004, 11.96423);
-out body qt;
+out geom tags;
