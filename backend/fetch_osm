@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+# Usage example: ./fetch_osm query.txt
+
+URL=https://overpass-api.de/api/interpreter
+
+function fetch {
+    if [ -z "$1" ]
+    then
+        echo "Usage example: fetch query.txt"
+        exit 1
+    fi
+
+    curl --data-urlencode data@$1 $URL
+}
+
+fetch $1
