@@ -9,26 +9,26 @@ const width = 1000;
 const height = 1000;
 const CUTOFF = 0.00001;
 
-function linearised_log(x, cutoff) {
+function linearisedLog(x, cutoff) {
     return x < cutoff ? x/cutoff : Math.log(x / cutoff) + 1;
 }
 
-function linearised_log_inverse(r, cutoff) {
+function linearisedLogInverse(r, cutoff) {
     return r < cutoff ? r * cutoff : cutoff * Math.exp((r - 1));
 }
 
-function guldheden_projection(lon, lat) {
+function guldhedenProjection(lon, lat) {
     let distance = d3.geoDistance([0, 0], [lon * 180 / Math.PI, lat * 180 / Math.PI]);
-    let r = linearised_log(distance, CUTOFF);
+    let r = linearisedLog(distance, CUTOFF);
     const b = Math.sin(lon) * Math.cos(lat);
     const a = Math.sin(lat);
     const theta = -Math.atan2(b, a) + Math.PI / 2;
     return [r * Math.cos(theta), r * Math.sin(theta)];
 }
 
-guldheden_projection.invert = function(x, y) {
+guldhedenProjection.invert = function(x, y) {
     const r = Math.sqrt(x**2 + y**2);
-    const distance = linearised_log_inverse(r, CUTOFF);
+    const distance = linearisedLogInverse(r, CUTOFF);
     const theta = Math.atan2(y, x);
     const bearing = Math.PI / 2 - theta;
     const lat2 = Math.asin(Math.sin(distance) * Math.cos(bearing));
@@ -54,7 +54,7 @@ export default class D3Map {
         const graticule = d3.geoGraticule();
 
         // @ts-ignore
-        const projection = d3.geoProjection(guldheden_projection)
+        const projection = d3.geoProjection(guldhedenProjection)
             .fitSize([width, height], graticule())
             .rotate([-11.961058, -57.6887483, 0]);
 
