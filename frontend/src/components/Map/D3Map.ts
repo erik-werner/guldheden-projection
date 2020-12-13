@@ -1,41 +1,14 @@
 import * as d3 from 'd3';
 import { RefObject } from 'react';
 import * as topojson from 'topojson-client';
+import { guldhedenProjection } from "../../projection/projection";
+
 
 type D3MapProps = {
     data: any;
 }
 const width = 1000;
 const height = 1000;
-const CUTOFF = 0.00001;
-
-function linearisedLog(x, cutoff) {
-    return x < cutoff ? x/cutoff : Math.log(x / cutoff) + 1;
-}
-
-function linearisedLogInverse(r, cutoff) {
-    return r < cutoff ? r * cutoff : cutoff * Math.exp((r - 1));
-}
-
-function guldhedenProjection(lon, lat) {
-    let distance = d3.geoDistance([0, 0], [lon * 180 / Math.PI, lat * 180 / Math.PI]);
-    let r = linearisedLog(distance, CUTOFF);
-    const b = Math.sin(lon) * Math.cos(lat);
-    const a = Math.sin(lat);
-    const theta = -Math.atan2(b, a) + Math.PI / 2;
-    return [r * Math.cos(theta), r * Math.sin(theta)];
-}
-
-guldhedenProjection.invert = function(x, y) {
-    const r = Math.sqrt(x**2 + y**2);
-    const distance = linearisedLogInverse(r, CUTOFF);
-    const theta = Math.atan2(y, x);
-    const bearing = Math.PI / 2 - theta;
-    const lat2 = Math.asin(Math.sin(distance) * Math.cos(bearing));
-    const lon2 = Math.atan2(Math.sin(bearing) * Math.sin(distance), Math.cos(distance))
-    return [lon2, lat2];
-}
-
 
 export default class D3Map {
 
