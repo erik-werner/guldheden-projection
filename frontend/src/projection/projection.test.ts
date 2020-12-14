@@ -12,7 +12,7 @@ const TEST_POINTS: Array<[number, number]> = [
 function norm2(arr1: Array<number>, arr2: Array<number>): number {
     return arr1
         .map((v1, i) => arr2[i] - v1)
-        .map(diff => diff * 2)
+        .map(diff => diff ** 2)
         .reduce((prev, curr) => prev + curr);
 }
 
