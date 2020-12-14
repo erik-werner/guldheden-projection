@@ -9,12 +9,23 @@ const TEST_POINTS: Array<[number, number]> = [
     [1, -1],
 ];
 
-function norm2(arr1: Array<number>, arr2: Array<number>): number {
-    return arr1
+function euclidianDistanceBetween(arr1: Array<number>, arr2: Array<number>): number {
+    const sumOfSquares = arr1
         .map((v1, i) => arr2[i] - v1)
         .map(diff => diff ** 2)
         .reduce((prev, curr) => prev + curr);
+    return sumOfSquares ** 0.5;
+
 }
+
+test('euclidianDistanceBetween two identical arrays is zero', () => {
+    const anArray = [1, 5, 8];
+    expect(euclidianDistanceBetween(anArray, anArray)).toBeCloseTo(0)
+});
+
+test('euclidianDistanceBetween two arrays is the Euclidian distance between them', () => {
+    expect(euclidianDistanceBetween([0, 100], [3, 104])).toBeCloseTo(5)
+});
 
 test('the prime meridian maps to x = 0', () => {
     const lon = 0;
@@ -35,7 +46,7 @@ test('the projection is an even function', () => {
     TEST_POINTS.forEach((point) => {
         const projectedMirrored = mirror(guldhedenProjection(...point));
         const mirroredProjected = guldhedenProjection(...mirror(point));
-        expect(norm2(projectedMirrored, mirroredProjected)).toBeCloseTo(0);
+        expect(euclidianDistanceBetween(projectedMirrored, mirroredProjected)).toBeCloseTo(0);
     });
 });
 
