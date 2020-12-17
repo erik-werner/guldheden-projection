@@ -29,7 +29,7 @@ export default class D3Map {
         // @ts-ignore
         const projection = d3.geoProjection(guldhedenProjection)
             .fitSize([width, height], graticule())
-            .rotate([-11.961058, -57.6887483, 0]);
+            .rotate([-11.961058, -57.6887483, 0]).clipAngle(179.99);
 
         const path = d3.geoPath(projection);
 
