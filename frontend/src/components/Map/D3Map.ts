@@ -43,11 +43,11 @@ export default class D3Map {
             .attr('x', width / 2)
             .attr('y', height * 3 / 5);
 
-        d3.json('/mapshaper_10m.topojson').then(plotWorld);
+        d3.json('/countries-50m.json').then(plotWorld);
 
         function plotWorld(world) {
             // @ts-ignore
-            const countries = topojson.feature(world, world.objects.ne_10m_admin_0_countries).features;
+            const countries = topojson.feature(world, world.objects.countries).features;
             svg.selectAll('.country')
                 .data(countries)
                 .enter().insert('path', '.graticule')
