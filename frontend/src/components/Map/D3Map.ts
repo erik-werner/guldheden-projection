@@ -1,14 +1,14 @@
 import * as d3 from 'd3';
 import { RefObject } from 'react';
 import * as topojson from 'topojson-client';
-import { guldhedenProjection } from "../../projection/projection";
+import { areaPreserving } from "../../projection/projection";
 
 
 type D3MapProps = {
     data: any;
 }
-const width = 1000;
-const height = 1000;
+const width = 800;
+const height = 800;
 
 export default class D3Map {
 
@@ -27,7 +27,7 @@ export default class D3Map {
         const graticule = d3.geoGraticule();
 
         // @ts-ignore
-        const projection = d3.geoProjection(guldhedenProjection)
+        const projection = d3.geoProjection(areaPreserving)
             .fitSize([width, height], graticule())
             .rotate([-11.961058, -57.6887483, 0]).clipAngle(179.99);
 

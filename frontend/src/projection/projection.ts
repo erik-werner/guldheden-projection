@@ -41,3 +41,10 @@ guldhedenProjection.invert = function (x: number, y: number): [number, number] {
     const lon = Math.atan2(Math.sin(bearing) * Math.sin(distance), Math.cos(distance));
     return [lon, lat];
 }
+
+export function areaPreserving(lon: number, lat: number): [number, number] {
+    const dist = geoToDistance(lon, lat);
+    const r = Math.sqrt(1-Math.cos(dist));
+    const theta = geoToTheta(lon, lat);
+    return [r * Math.cos(theta), r * Math.sin(theta)];
+}
